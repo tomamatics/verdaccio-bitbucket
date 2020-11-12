@@ -12,16 +12,17 @@ Bitbucket 2.0 API.
 This package is a just fork of https://github.com/idangozlan/verdaccio-bitbucket, but uses a non-deprecated Bitbucket API to resolve user permissions.
 If you have trouble authenticating your verdaccio users with the original package, this may be your rescue.
 
+
 ## Install
 
 As simple as running:
 
-    $ npm install -g verdaccio-bitbucket
+    $ npm install -g verdaccio-auth-bitbucket
 
 ## Configure
 
     auth:
-      bitbucket:
+      auth-bitbucket:
         allow: TeamOne(owner), TeamX(owner|collaborator|member), TeamZ
         ttl: 604800 # 7 days
         defaultMailDomain: gmail.com
@@ -48,46 +49,7 @@ As simple as running:
 | `cache`             | Caching engine to prevent re-accessing bitbucket servers. For Production usage and scaling, Redis is highly recommended                                                | redis\|in-memory\|null | in-memory     |
 | `redis`             | YAML Nested Map of options for Redis Client creation (look on the config sample). Read more https://github.com/NodeRedis/node_redis                                    | YAML Nested Map        |               |
 
-* `hashPassword` option is currently not supported by `verdaccio/verdaccio` docker image, since it's running on Linux Alpine without the `bcrypt` required packages.
 
-### How does it work?
+### More Details?
 
-User provides a login/password which he uses to perform auth on Bitbucket.
-Verdaccio will grant access to the user only if he matches the teams and roles
-from the configured "allow" option.
-
-This option provides a way to specify which teams and their roles should be
-authorized by Verdaccio. If team name is set without roles it would be treated
-as any role grants a successful sign in for the user. Controversial, if roles 
-are specified within the team, Verdaccio will check if signed user has an
-appropriate role in the team.
-
-After this it is becomes possible to configure team-based access to the packages
-as seen on config example above.
-
-### Logging In
-
-To log in using NPM, run:
-
-```
-    npm adduser --registry  https://your.registry.local
-```
-Since the username for Bitbucket is the email addresses 
-and cannot contain `@`, replace the `@` with two periods `..`
-The email address is then parsed and converted to a normal email address for authentication
-
-Alternatively you can specify the `defaultMailDomain` configuration option,
-if most (or all) your users use the same mail provider or an own mail server.
-In this case the users have to provide only the local-part of there Bitbucket
-email address (the part before the `@`) as a username.
-It is still possible to override the default domain via the `..` convention
-mentioned above.
-
-### Notes
-
-Please be aware, that self-hosted "Bitbucket Server" are not supported. If you need support for Bitbucket Server please refer to [verdaccio-bitbucket-server](https://github.com/oeph/verdaccio-bitbucket-server).
-
-It is currently not supported adding Bitbucket user via npm command line.
-Maybe I will add this option in the future if there would be such need.
-If you want to help improve this module - feel free to contribute or do whatever
-you want. License is MIT, as usual.
+For more information please visit the original package https://github.com/idangozlan/verdaccio-bitbucket
