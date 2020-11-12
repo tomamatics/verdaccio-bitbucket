@@ -23,7 +23,7 @@ Bitbucket.prototype.getPrivileges = function getPrivileges() {
       response.data.values.forEach(
         ({ permission, workspace }) => {
           teams[workspace.name] = permission;
-        }
+        },
       );
 
       if (response.data.next) {
