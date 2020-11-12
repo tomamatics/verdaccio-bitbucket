@@ -1,8 +1,8 @@
 {
   "name": "verdaccio-bitbucket",
   "author": {
-    "name": "Idan Gozlan",
-    "email": "idangozlan@gmail.com"
+    "name": "Tom Pachtner",
+    "email": "tompachtner@gmail.com"
   },
   "scripts": {
     "lint": "eslint ./src --fix",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/idangozlan/verdaccio-bitbucket.git"
+    "url": "https://github.com/tomamatics/verdaccio-bitbucket"
   },
   "engines": {
     "node": "*"

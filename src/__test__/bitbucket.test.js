@@ -10,33 +10,57 @@ describe('Bitbucket', () => {
     moxios.uninstall();
   });
 
-  describe('#getTeams', () => {
-    it('should return the teams', () => {
+  describe('#getPrivileges', () => {
+    it('should return the privileges', () => {
       expect.assertions(1);
-      moxios.stubRequest(/^https:\/\/api.bitbucket.org\/2.0\/teams\?role=member&pagelen=\d+$/, {
+      moxios.stubRequest(/^https:\/\/api.bitbucket.org\/2.0\/user\/permissions\/workspaces$/, {
         status: 200,
         response: {
           values: [
-            { username: 'foo' },
-            { username: 'bar' },
+            {
+              permission: 'owner',
+              workspace: {
+                name: 'My first workspace',
+              },
+            },
+            {
+              permission: 'collaborator',
+              workspace: {
+                name: 'My second workspace',
+              },
+            },
+            {
+              permission: 'member',
+              workspace: {
+                name: 'My third workspace',
+              },
+            },
           ],
         },
       });
-      return new Bitbucket('u', 'p', console).getTeams('member').then((response) => {
+      return new Bitbucket('u', 'p', console).getPrivileges().then((response) => {
         expect(response).toEqual({
-          role: 'member',
-          teams: ['foo', 'bar'],
+          teams: {
+            'My first workspace': 'owner',
+            'My second workspace': 'collaborator',
+            'My third workspace': 'member',
+          },
         });
       });
     });
 
     it('should follow next page links', () => {
-      moxios.stubRequest(/^https:\/\/api.bitbucket.org\/2.0\/teams\?role=member&pagelen=\d+$/, {
+      moxios.stubRequest(/^https:\/\/api.bitbucket.org\/2.0\/user\/permissions\/workspaces$/, {
         status: 200,
         response: {
           next: 'https://example.org/page2',
           values: [
-            { username: 'foo' },
+            {
+              permission: 'owner',
+              workspace: {
+                name: 'My first workspace',
+              },
+            },
           ],
         },
       });
@@ -44,32 +68,20 @@ describe('Bitbucket', () => {
         status: 200,
         response: {
           values: [
-            { username: 'bar' },
-            { username: 'baz' },
+            {
+              permission: 'collaborator',
+              workspace: {
+                name: 'My second workspace',
+              },
+            },
           ],
         },
       });
-      return new Bitbucket('u', 'p', console).getTeams('member').then((response) => {
-        expect(response).toEqual({
-          role: 'member',
-          teams: ['foo', 'bar', 'baz'],
-        });
-      });
-    });
-  });
-
-  describe('#getPrivileges', () => {
-    it('should return privileges returned by getTeams', () => {
-      const bb = new Bitbucket('u', 'p', console);
-      bb.getTeams = role => new Promise((resolve) => {
-        resolve({ role, teams: [`${role}Team`] });
-      });
-      return bb.getPrivileges().then((response) => {
+      return new Bitbucket('u', 'p', console).getPrivileges().then((response) => {
         expect(response).toEqual({
           teams: {
-            memberTeam: 'member',
-            contributorTeam: 'contributor',
-            adminTeam: 'admin',
+            'My first workspace': 'owner',
+            'My second workspace': 'collaborator',
           },
         });
       });

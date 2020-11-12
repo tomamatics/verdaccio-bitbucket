@@ -149,6 +149,8 @@ Auth.prototype.authenticate = async function authenticate(username, password, do
   );
 
   return bitbucket.getPrivileges().then(async (privileges) => {
+    // { teams: { lascucarachas: 'member', jatosha: 'admin' } }
+
     const teams = Object.keys(privileges.teams)
       .filter((team) => {
         if (this.allow[team] === undefined) {
