@@ -1,5 +1,5 @@
 {
-  "name": "verdaccio-bitbucket",
+  "name": "verdaccio-auth-bitbucket",
   "author": {
     "name": "Tom Pachtner",
     "email": "tompachtner@gmail.com"
